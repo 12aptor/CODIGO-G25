@@ -21,4 +21,40 @@ def adivinanza():
         else:
             print("El número es menor")
 
-adivinanza()
+# adivinanza()
+
+
+"""Crear un generador de contraseñas seguras. El programa debe pedir al usuario la longitud de la contraseña"""
+
+import string
+
+def generar_password():
+    longitud = int(input("Número de caracteres de la contraseña: "))
+    # caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()'
+    caracteres = string.ascii_letters + string.digits + string.punctuation
+    password = ''
+    for i in range(longitud):
+        password += random.choice(caracteres)
+    
+    print(f"Tu contraseña segura es: {password}")
+
+
+# generar_password()
+
+
+"""Crear un programa que me muestre posts (CONSUMIENDO UNA API)"""
+
+import requests
+
+def mostrar_posts():
+    API_URL = 'https://jsonplaceholder.typicode.com/posts/1'
+    respuesta = requests.get(API_URL)
+    datos = respuesta.json()
+    estado = respuesta.status_code
+    if estado == 200:
+        print(f"Título: {datos['title']}")
+        print(f"Contenido: {datos['body']}")
+    else:
+        print("No se pudo obtener la información")
+
+mostrar_posts()
