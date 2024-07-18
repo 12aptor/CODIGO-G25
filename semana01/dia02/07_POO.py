@@ -30,3 +30,18 @@ print(persona.nombre)
 # Acceder a los métodos
 persona.saludar()
 # persona.__metodo_privado()  # Error
+
+
+"""Herencia"""
+class Alumno(Persona):
+    def __init__(self, nombre: str, edad: int, casado: bool, dni: str) -> None:
+        # super() llama al constructor de la clase padre
+        super().__init__(nombre, edad, casado)
+        # Atributos propios de la clase hija
+        self.dni = dni
+
+    def mostrar_edad(self) -> None:
+        print(f"Mi edad es {self.edad}")
+
+alumno = Alumno("Juan", 25, False, "65656565")
+alumno.saludar()
