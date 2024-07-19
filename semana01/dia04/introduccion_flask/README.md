@@ -17,5 +17,14 @@ pip install Flask
 ## Crear un archivo app.py
 
 ```python
+from flask import Flask
 
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return 'Bienvenido a mi primera app de Flask 😎'
+
+if __name__ == '__main__':
+    app.run(debug=True)
 ```
