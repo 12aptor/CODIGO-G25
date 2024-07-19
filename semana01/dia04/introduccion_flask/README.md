@@ -28,3 +28,10 @@ def home():
 if __name__ == '__main__':
     app.run(debug=True)
 ```
+
+
+## Ejecutar la aplicación
+
+```bash
+python app.py
+```
