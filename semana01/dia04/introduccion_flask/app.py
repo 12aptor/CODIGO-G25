@@ -1,5 +1,5 @@
 # Importamos la clase Flask desde el paquete flask
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 # Instanciamos la clase Flask
 app = Flask(__name__)
@@ -21,6 +21,15 @@ def about(username):
 @app.route('/sign-in', methods=['POST'])
 # @app.route('/sign-in', methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'])
 def sign_in():
+    # json = request.json
+    json = request.get_json()
+
+    # path
+    path = request.path
+    
+    # method
+    method = request.method
+
     return 'Iniciando sesión'
 
 # Tambien podemos definir una ruta con un método específico @app.post()
@@ -33,6 +42,18 @@ def sign_up():
 def home_page():
     products = ['Celular', 'Laptop', 'Smartwatch']
     return render_template('home.html', products=products)
+
+@app.post('/product/create')
+def create_product():
+    image = request.files['image']
+    print(image)
+    
+    # El request.form['key'] siempre devuelve un string
+    name = request.form['name']
+    print(name)
+    price = request.form['price']
+    print(type(price))
+    return 'Creando producto'
 
 # Corremos la aplicación
 if __name__ == '__main__':
