@@ -143,10 +143,44 @@ La escalabilidad horizontal es la capacidad de aumentar la capacidad de procesam
 
 ```bash
 project
-│   README.md
-│   ...
-│---controllers (Toda la lógica de negocio)
-│---models (Modelos de la base de datos)
-│---routes (Rutas de la aplicación)
-│---utils (Funciones de utilidad)
+├── README.md
+├── ...
+├── controllers     # Toda la lógica de negocio
+│   └── example_controller.py
+├── models          # Modelos de la base de datos
+│   └── example_model.py
+├── routes          # Rutas de la aplicación
+│   └── example_router.py
+├── config          # Configuración del proyecto
+│   └── config.py
+└── utils           # Funciones de utilidad
+   └── example_utils.py
+```
+
+```bash
+project
+├── README.md
+├── ...
+└── app
+    ├── ventas
+    │   ├── controllers
+    │   │   └── ventas_controller.py
+    │   ├── models
+    │   │   └── ventas_model.py
+    │   ├── routes
+    │   │   └── ventas_router.py
+    │   └── utils
+    │       └── ventas_utils.py
+    ├── usuarios
+    │   ├── controllers
+    │   │   └── usuarios_controller.py
+    │   ├── models
+    │   │   └── usuarios_model.py
+    │   ├── routes
+    │   │   └── usuarios_router.py
+    │   └── utils
+    │       └── usuarios_utils.py
+    └── config
+        └── config.py
+
 ```
