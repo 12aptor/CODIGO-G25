@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from db import db
 from sqlalchemy import Column, Integer, String
 from flask_migrate import Migrate
@@ -23,12 +23,45 @@ class Movies(db.Model):
     year = Column(Integer)
     length_minutes = Column(Integer)
 
+    def __str__(self):
+        return f'{self.title}'
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'director': self.director,
+            'year': self.year,
+            'length_minutes': self.length_minutes
+        }
+
 
 @app.route('/movies')
 def index():
     movies = Movies.query.all()
-    print(movies)
-    return 'Hello World!'
+    
+    response = []
+    for movie in movies:
+        response.append(movie.to_dict())
+
+    return {
+        'message': 'Movies found',
+        'data': response
+    }, 200
+
+@app.route('/movies/<int:id>')
+def movie_by_id(id):
+    movie = Movies.query.get(id)
+
+    if movie is None:
+        return {
+            'message': 'Movie not found'
+        }, 404
+
+    return {
+        'message': 'Movie found',
+        'data': movie.to_dict()
+    }, 200
 
 if __name__ == '__main__':
     app.run(debug=True)
