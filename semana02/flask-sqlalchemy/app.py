@@ -1,6 +1,7 @@
 from flask import Flask
 from db import db
 from sqlalchemy import Column, Integer, String
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 
@@ -10,7 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:root@localhost:54
 
 # Inicializacion de la base de datos
 db.init_app(app)
-
+migrate = Migrate(app, db)
 
 # Definicion de la clase Movies
 class Movies(db.Model):
@@ -23,11 +24,11 @@ class Movies(db.Model):
     length_minutes = Column(Integer)
 
 
-@app.route('/')
+@app.route('/movies')
 def index():
-    # Creacion de la tabla
-    db.create_all()
-    return 'Hello, World!'
+    movies = Movies.query.all()
+    print(movies)
+    return 'Hello World!'
 
 if __name__ == '__main__':
     app.run(debug=True)

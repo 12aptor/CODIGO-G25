@@ -50,12 +50,15 @@ db = SQLAlchemy()
 ```python
 from flask import Flask
 from db import db
+from sqlalchemy import Column, Integer, String
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
 db.init_app(app)
+migrate = Migrate(app, db)
 
 class Movies(db.Model):
     __tablename__ = 'movies'
@@ -68,4 +71,17 @@ class Movies(db.Model):
 
 if __name__ == '__main__':
     app.run(debug=True)
+```
+
+## Ejecutar la migración
+
+```bash
+# Crear la carpeta migrations (Solo la primera vez)
+flask db init
+
+# Crear la migración (Cada vez que se modifique el modelo)
+flask db migrate -m "Create tables"
+
+# Aplicar la migración (Cada vez que se modifique el modelo)
+flask db upgrade
 ```
