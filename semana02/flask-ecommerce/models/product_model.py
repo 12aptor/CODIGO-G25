@@ -4,21 +4,26 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
+    Float,
     Boolean,
     DateTime,
     ForeignKey
 )
 import datetime
 
-class UserModel(db.Model):
-    __tablename__ = 'users'
+class ProductModel(db.Model):
+    __tablename__ = 'products'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(200))
-    last_name = Column(String(200))
-    email = Column(String(200))
-    password = Column(Text)
+    code = Column(String(50))
+    description = Column(Text)
+    image = Column(Text)
+    brand = Column(String(100))
+    size = Column(String(10))
+    price = Column(Float)
+    stock = Column(Integer)
     status = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.datetime.now)
     updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
-    rol_id = Column(Integer, ForeignKey('roles.id'))
+    category_id = Column(Integer, ForeignKey='categories.id')
