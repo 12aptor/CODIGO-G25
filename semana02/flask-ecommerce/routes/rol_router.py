@@ -8,3 +8,7 @@ controller = RolController()
 def create_rol():
     json = request.json
     return controller.create(json)
+
+@rol_router.get('/get_all')
+def get_all_roles():
+    return controller.get_all()
