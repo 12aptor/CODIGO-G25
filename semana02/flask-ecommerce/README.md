@@ -9,6 +9,8 @@ pip install Flask-Migrate
 pip install Flask-Cors
 pip install psycopg2-binary
 pip install pydantic
+pip install bcrypt
+pip install bcrypt[email]
 ```
 
 ## Convertir json a objeto
