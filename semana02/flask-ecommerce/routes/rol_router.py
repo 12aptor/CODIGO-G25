@@ -12,3 +12,12 @@ def create_rol():
 @rol_router.get('/get_all')
 def get_all_roles():
     return controller.get_all()
+
+@rol_router.put('/update/<int:id>')
+def update_rol(id):
+    json = request.json
+    return controller.update(id, json)
+
+@rol_router.delete('/delete/<int:id>')
+def delete_rol(id):
+    return controller.delete(id)
