@@ -1,12 +1,15 @@
 from models.rol_model import RolModel
+from models.user_model import UserModel
 from schemas.rol_schema import RolSchema, UpdateRolSchema
 from pydantic import ValidationError
 from db import db
+from flask_jwt_extended import get_jwt_identity
 
 
 class RolController:
     def __init__(self):
         self.model = RolModel
+        self.user_model = UserModel
 
     def create(self, json: dict):
         try:
@@ -35,6 +38,16 @@ class RolController:
         
     def get_all(self):
         try:
+            identity = get_jwt_identity()
+            user = self.user_model.query.get(identity)
+
+            if user is None:
+                return {
+                    'message': 'Unauthorized',
+                }, 401
+            
+            # if user.rol.name == 'ADMIN':
+
             roles = self.model.query.all()
 
             return {
