@@ -11,6 +11,7 @@ pip install psycopg2-binary
 pip install pydantic
 pip install bcrypt
 pip install bcrypt[email]
+pip install flask-jwt-extended
 ```
 
 ## Convertir json a objeto

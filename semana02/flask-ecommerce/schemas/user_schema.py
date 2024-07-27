@@ -6,3 +6,7 @@ class UserSchema(BaseModel):
     email: EmailStr
     password: str
     rol_id: int
+
+class LoginSchema(BaseModel):
+    email: EmailStr
+    password: str
