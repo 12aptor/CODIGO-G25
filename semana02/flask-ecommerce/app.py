@@ -3,6 +3,8 @@ from db import db
 from flask_migrate import Migrate
 from routes.rol_router import rol_router
 from routes.user_router import user_router
+from flask_jwt_extended import JWTManager
+from config import Config
 
 from models import (
     category_model,
@@ -16,10 +18,11 @@ from models import (
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:root@localhost:5432/flask-ecommerce'
+app.config.from_object(Config)
 
 db.init_app(app)
 migrate = Migrate(app, db)
+jwt = JWTManager(app)
 
 app.register_blueprint(rol_router, url_prefix='/api/rol')
 app.register_blueprint(user_router, url_prefix='/api/user')

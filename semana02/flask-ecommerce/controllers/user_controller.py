@@ -82,15 +82,17 @@ class UserController:
                 return {
                     'message': 'Unauthorized',
                 }, 401
+            
+            access_token = create_access_token(identity=user.id)
+            refresh_token = create_refresh_token(identity=user.id)
 
             return {
                 'message': 'Loged successfully',
                 'data': {
-                    'access_token': 'asdfasdf',
-                    'refresh_token': 'asdfasdfasd'
+                    'access_token': access_token,
+                    'refresh_token': refresh_token
                 }
             }, 200
-        
         except ValidationError as e:
             return {
                 'message': 'Validation Error',
