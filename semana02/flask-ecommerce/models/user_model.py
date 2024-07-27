@@ -8,6 +8,8 @@ from sqlalchemy import (
     DateTime,
     ForeignKey
 )
+from sqlalchemy.orm import relationship
+from models.rol_model import RolModel
 import datetime
 
 class UserModel(db.Model):
@@ -22,6 +24,8 @@ class UserModel(db.Model):
     created_at = Column(DateTime, default=datetime.datetime.now)
     updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
     rol_id = Column(Integer, ForeignKey('roles.id'))
+
+    rol = relationship(RolModel)
 
     def to_dict(self):
         return {

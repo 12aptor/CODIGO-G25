@@ -38,16 +38,6 @@ class RolController:
         
     def get_all(self):
         try:
-            identity = get_jwt_identity()
-            user = self.user_model.query.get(identity)
-
-            if user is None:
-                return {
-                    'message': 'Unauthorized',
-                }, 401
-            
-            # if user.rol.name == 'ADMIN':
-
             roles = self.model.query.all()
 
             return {
