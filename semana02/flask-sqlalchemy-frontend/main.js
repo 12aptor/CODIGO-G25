@@ -29,17 +29,23 @@ const handleCreateMovie = (moviesList) => {
 
   createMovie.addEventListener("click", async () => {
     const movie = {
-      title: "The Matrix",
+      title: "Stuart Little",
       director: "Lana Wachowski",
       year: 1999,
       length_minutes: 136,
     };
 
-    const { json, status } = await postMovieService(movie);
+    try {
+      const { json, status } = await postMovieService(movie);
 
-    if (status === 201) {
-      alert(json.message);
-      addMovieToList(moviesList, movie);
+      if (status === 201) {
+        alert(json.message);
+        addMovieToList(moviesList, movie);
+      }
+
+      throw new Error(json.message);
+    } catch (error) {
+      alert(error.message);
     }
   });
 };
