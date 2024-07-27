@@ -14,6 +14,7 @@ source venv/Scripts/activate
 pip install Flask
 pip install Flask-SQLAlchemy
 pip install Flask-Migrate
+pip install Flask-Cors
 ```
 
 ## Crear un archivo app.py

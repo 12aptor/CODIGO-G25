@@ -2,8 +2,10 @@ from flask import Flask, request
 from db import db
 from sqlalchemy import Column, Integer, String
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 app = Flask(__name__)
+cors = CORS(app)
 
 # Configuracion de la base de datos
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@hostname/database_name'
