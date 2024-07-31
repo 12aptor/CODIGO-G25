@@ -17,3 +17,12 @@ class CategoryModel(db.Model):
     status = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.datetime.now)
     updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'status': self.status,
+            'created_at': str(self.created_at),
+            'updated_at': str(self.updated_at)
+        }
