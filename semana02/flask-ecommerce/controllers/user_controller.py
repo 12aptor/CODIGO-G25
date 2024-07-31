@@ -68,7 +68,7 @@ class UserController:
                 email=validated_crendentials.email
             ).first()
             
-            if user is None:
+            if user is None or user.status == False:
                 return {
                     'message': 'Unauthorized',
                 }, 401
@@ -142,6 +142,28 @@ class UserController:
                 'errors': e.errors(),
             }, 400
         
+        except Exception as e:
+            return {
+                'message': 'An error occurred',
+                'error': str(e)
+            }, 500
+        
+    def delete(self, id: int):
+        try:
+            user = self.model.query.get(id)
+
+            if user is None:
+                return {
+                    'message': 'User not found',
+                }
+            
+            user.status = False
+            
+            db.session.commit()
+
+            return {
+                'message': 'User deleted successfully',
+            }, 200
         except Exception as e:
             return {
                 'message': 'An error occurred',

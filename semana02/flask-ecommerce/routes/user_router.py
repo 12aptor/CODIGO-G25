@@ -27,3 +27,8 @@ def login():
 def update_user(id):
     json = request.json
     return controller.update(id, json)
+
+@user_router.delete('/delete/<int:id>')
+@role_required('ADMIN')
+def delete_user(id):
+    return controller.delete(id)
