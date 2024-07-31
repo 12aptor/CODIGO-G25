@@ -94,3 +94,25 @@ class CategoryController:
                 'message': 'An error occurred',
                 'error': str(e)
             }, 500
+        
+    def delete(self, id: int):
+        try:
+            category = self.model.query.get(id)
+
+            if category is None:
+                return {
+                    'message': 'Category not found',
+                }, 404
+            
+            category.status = False
+
+            db.session.commit()
+
+            return {
+                'message': 'Category deleted successfully',
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'An error occurred',
+                'error': str(e)
+            }, 500

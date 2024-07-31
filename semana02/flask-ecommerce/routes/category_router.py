@@ -22,6 +22,12 @@ def get_all_categories_for_clients():
     return controller.get_all_for_clients()
 
 @category_router.put('/update/<int:id>')
+@role_required('ADMIN')
 def update_category(id):
     json = request.json
     return controller.update(id, json)
+
+@category_router.delete('/delete/<int:id>')
+@role_required('ADMIN')
+def delete_category(id):
+    return controller.delete(id)
