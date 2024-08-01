@@ -6,7 +6,7 @@ from functools import wraps
 from models.user_model import UserModel
 
 
-def role_required(role: str):
+def role_required(role: str = None):
     def decorator(fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):
@@ -20,10 +20,11 @@ def role_required(role: str):
                     'message': 'Unauthorized'
                 }, 401
             
-            if user.rol.name != role:
-                return {
-                    'message': 'Unauthorized'
-                }, 401
+            if role is not None:
+                if user.rol.name != role:
+                    return {
+                        'message': 'Unauthorized'
+                    }, 401
             
             return fn(*args, **kwargs)
         return wrapper

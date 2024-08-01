@@ -12,6 +12,7 @@ pip install pydantic
 pip install bcrypt
 pip install bcrypt[email]
 pip install flask-jwt-extended
+pip install cloudinary
 ```
 
 ## Convertir json a objeto
