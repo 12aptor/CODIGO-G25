@@ -24,7 +24,7 @@ class ProductController:
 
             filename = image.filename.split('.')[0]
             public_id = f'{uuid.uuid4()}-{filename}'
-            
+
             cloudinary.uploader.upload(image.stream, public_id=public_id)
 
             new_product = self.model(**validated_product.model_dump())
@@ -94,10 +94,12 @@ class ProductController:
 
             if image is not None:
                 filename = image.filename.split('.')[0]
-                upload_response = cloudinary.uploader.upload(image.stream, public_id=f'{uuid.uuid4()}-{filename}')
-                destroy_response = cloudinary.uploader.destroy(product.image)
-                print(destroy_response)
-                product.image = upload_response['secure_url']
+                public_id = f'{uuid.uuid4()}-{filename}'
+
+                cloudinary.uploader.upload(image.stream, public_id=public_id)
+                cloudinary.uploader.destroy(product.image)
+                
+                product.image = public_id
 
             product.brand = validated_product.brand
             product.size = validated_product.size

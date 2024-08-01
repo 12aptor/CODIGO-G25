@@ -10,6 +10,8 @@ from sqlalchemy import (
     ForeignKey
 )
 import datetime
+import utils.cloudinary_config
+import cloudinary.utils
 
 class ProductModel(db.Model):
     __tablename__ = 'products'
@@ -35,7 +37,7 @@ class ProductModel(db.Model):
             'name': self.name,
             'code': self.code,
             'description': self.description,
-            'image': self.image,
+            'image': cloudinary.utils.cloudinary_url(self.image, secure=True)[0],
             'brand': self.brand,
             'size': self.size,
             'price': self.price,
