@@ -9,3 +9,6 @@ class ProductSchema(BaseModel):
     price: float
     stock: int
     category_id: int
+
+class UpdateProductSchema(ProductSchema):
+    status: bool
