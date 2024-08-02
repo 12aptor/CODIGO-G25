@@ -125,3 +125,44 @@ class ProductController:
                 'message': 'An error occurred',
                 'error': str(e)
             }, 500
+        
+    def delete(self, id: int):
+        try:
+            product = self.model.query.get(id)
+
+            if product is None:
+                return {
+                    'message': 'Product not found',
+                }, 404
+            
+            product.status = False
+
+            db.session.commit()
+
+            return {
+                'message': 'Product deleted successfully',
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'An error occurred',
+                'error': str(e)
+            }, 500
+        
+    def get_by_id(self, id: int):
+        try:
+            product = self.model.query.get(id)
+
+            if product is None:
+                return {
+                    'message': 'Product not found',
+                }, 404
+            
+            return {
+                'message': 'Product fetched successfully',
+                'data': product.to_dict()
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'An error occurred',
+                'error': str(e)
+            }, 500

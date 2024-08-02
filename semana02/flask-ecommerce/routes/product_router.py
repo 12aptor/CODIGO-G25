@@ -29,3 +29,12 @@ def update_product(id: int):
     image = request.files.get('image')
     form = request.form
     return controller.update(id, form, image)
+
+@product_router.delete('/delete/<int:id>')
+@role_required()
+def delete_product(id: int):
+    return controller.delete(id)
+
+@product_router.get('/get_by_id/<int:id>')
+def get_product_by_id(id: int):
+    return controller.get_by_id(id)
