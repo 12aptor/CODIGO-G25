@@ -16,3 +16,13 @@ class OrderDetailModel(db.Model):
     subtotal = Column(Float)
     product_id = Column(Integer, ForeignKey('products.id'))
     order_id = Column(Integer, ForeignKey('orders.id'))
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'quantity': self.quantity,
+            'price': self.price,
+            'subtotal': self.subtotal,
+            'product_id': self.product_id,
+            'order_id': self.order_id
+        }
