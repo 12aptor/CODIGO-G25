@@ -96,3 +96,39 @@ class OrderController:
                 'message': 'An error occurred',
                 'error': str(e)
             }, 500
+        
+    def get_all(self):
+        try:
+            orders = self.order_model.query.all()
+
+            return {
+                'message': 'Orders fetched successfully',
+                'data': [order.to_dict() for order in orders]
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'An error occurred',
+                'error': str(e)
+            }, 500
+        
+    def cancel(self, id: int):
+        try:
+            order = self.order_model.query.get(id)
+
+            if order is None:
+                return {
+                    'message': 'Order not found',
+                }, 404
+            
+            order.status = False
+
+            db.session.commit()
+
+            return {
+                'message': 'Order cancelled successfully',
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'An error occurred',
+                'error': str(e)
+            }, 500
