@@ -3,6 +3,7 @@ from db import db
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from config import Config
+from flask_cors import CORS
 
 from routes.rol_router import rol_router
 from routes.user_router import user_router
@@ -12,6 +13,7 @@ from routes.order_router import order_router
 
 
 app = Flask(__name__)
+cors = CORS(app)
 
 app.config.from_object(Config)
 

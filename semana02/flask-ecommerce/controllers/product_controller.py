@@ -36,7 +36,7 @@ class ProductController:
             return {
                 'message': 'Product created successfully',
                 'product': new_product.to_dict()
-            }
+            }, 201
         except ValidationError as e:
             return {
                 'message': 'Validation Error',
