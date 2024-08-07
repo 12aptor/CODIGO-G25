@@ -15,6 +15,7 @@ pip install Flask
 pip install Flask-SQLAlchemy
 pip install Flask-Migrate
 pip install Flask-Cors
+pip instal psycopg2-binary
 ```
 
 ## Crear un archivo app.py
