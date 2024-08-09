@@ -9,18 +9,56 @@ from rest_framework import generics
 #     RetrieveDestroyAPIView, # Permite obtener un objeto y eliminarlo por su id
 #     RetrieveUpdateDestroyAPIView, # Permite obtener un objeto, actualizarlo y eliminarlo por su id
 # )
-from .models import CanchaModel
-from .serializer import CanchaSerializer
+from .models import *
+from .serializer import *
 
 
-class CanchaListView(generics.ListCreateAPIView):
+class CanchaListView(generics.ListAPIView):
     queryset = CanchaModel.objects.all()
     serializer_class = CanchaSerializer
 
 class CanchaCreateView(generics.CreateAPIView):
     queryset = CanchaModel.objects.all()
     serializer_class = CanchaSerializer
+    
+class CanchaRetrieveView(generics.RetrieveAPIView):
+    queryset = CanchaModel.objects.all()
+    serializer_class = CanchaSerializer
 
-    def create(self, request, *args, **kwargs):
-        print(request.headers)
-        return super().create(request, *args, **kwargs)
+class CanchaUpdateView(generics.UpdateAPIView):
+    queryset = CanchaModel.objects.all()
+    serializer_class = CanchaSerializer
+
+class CanchaDestroyView(generics.DestroyAPIView):
+    queryset = CanchaModel.objects.all()
+    serializer_class = CanchaSerializer
+
+class CanchaRetrieveByNameView(generics.ListAPIView):
+    serializer_class = CanchaSerializer
+
+    # Podemos personalizar el queryset para que filtre el nombre de la cancha
+    def get_queryset(self):
+        nombre = self.kwargs.get('nombre') # self.kwargs['nombre']
+        return CanchaModel.objects.filter(nombre__icontains=nombre).order_by('-id')
+
+
+# Views para reservas
+class ReservaListView(generics.ListAPIView):
+    queryset = ReservaModel.objects.all()
+    serializer_class = ReservaSerializer
+
+class ReservaCreateView(generics.CreateAPIView):
+    queryset = ReservaModel.objects.all()
+    serializer_class = ReservaSerializer
+
+class ReservaRetrieveView(generics.RetrieveAPIView):
+    queryset = ReservaModel.objects.all()
+    serializer_class = ReservaSerializer
+
+class ReservaUpdateView(generics.UpdateAPIView):
+    queryset = ReservaModel.objects.all()
+    serializer_class = ReservaSerializer
+
+class ReservaDestroyView(generics.DestroyAPIView):
+    queryset = ReservaModel.objects.all()
+    serializer_class = ReservaSerializer

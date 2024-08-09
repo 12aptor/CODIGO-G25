@@ -18,7 +18,7 @@ class ReservaModel(models.Model):
     hora = models.TimeField()
     nombre_cliente = models.CharField(max_length=200)
     tiempo = models.IntegerField()
-    cancha_id = models.ForeignKey(CanchaModel, on_delete=models.CASCADE)
+    cancha_id = models.ForeignKey(CanchaModel, on_delete=models.CASCADE, related_name='reservas')
 
     class Meta:
         db_table = 'reservas'
