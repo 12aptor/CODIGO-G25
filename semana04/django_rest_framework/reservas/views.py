@@ -1,4 +1,5 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
 # from rest_framework.generics import (
 #     ListAPIView, # Lista de todos los objetos
 #     CreateAPIView, # Permite crear un nuevo objeto
@@ -11,6 +12,7 @@ from rest_framework import generics
 # )
 from .models import *
 from .serializer import *
+from pprint import pprint
 
 
 class CanchaListView(generics.ListAPIView):
@@ -44,16 +46,50 @@ class CanchaRetrieveByNameView(generics.ListAPIView):
 
 # Views para reservas
 class ReservaListView(generics.ListAPIView):
-    queryset = ReservaModel.objects.all()
     serializer_class = ReservaSerializer
+
+    def get_queryset(self):
+        return ReservaModel.objects.order_by('-id')
+
+    def list(self, request):
+        # Recuperamos el queryset
+        queryset = self.get_queryset()
+        # Recuperamos el serializer
+        serializer = self.get_serializer(queryset, many=True)
+        # Los objetos objetos serializados en una lista
+        data = serializer.data
+
+        for reserva in data:
+            reserva['mensaje'] = 'Empezar hora exacta, no se dará minutos extra'
+
+        return Response({
+            'message': 'Lista de reservas',
+            'data': data
+        }, status=status.HTTP_200_OK)
 
 class ReservaCreateView(generics.CreateAPIView):
     queryset = ReservaModel.objects.all()
     serializer_class = ReservaSerializer
 
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        # Aquí podemos crear toda nuestra lógica del método
+        response = super().create(request, *args, **kwargs)
+        return Response({
+            'message': 'Reserva creada exitosamente',
+            'data': response.data
+        }, status=status.HTTP_201_CREATED)
+
 class ReservaRetrieveView(generics.RetrieveAPIView):
     queryset = ReservaModel.objects.all()
     serializer_class = ReservaSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        page = request.query_params.get('page')
+        print(page)
+        items_per_page = request.query_params.get('itemsPerPage')
+        print(items_per_page)
+        return super().retrieve(request, *args, **kwargs)
 
 class ReservaUpdateView(generics.UpdateAPIView):
     queryset = ReservaModel.objects.all()
