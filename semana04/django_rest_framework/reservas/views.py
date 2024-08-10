@@ -13,11 +13,16 @@ from rest_framework.response import Response
 from .models import *
 from .serializer import *
 from pprint import pprint
+from rest_framework.permissions import IsAuthenticated
 
 
 class CanchaListView(generics.ListAPIView):
     queryset = CanchaModel.objects.all()
     serializer_class = CanchaSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 class CanchaCreateView(generics.CreateAPIView):
     queryset = CanchaModel.objects.all()

@@ -21,7 +21,8 @@ INSTALLED_APPS = [
     ...,
     'rest_framework',
     'drf_yasg',
-    "corsheaders",
+    'corsheaders',
+    'rest_framework_simplejwt',
     ...
 ]
 
@@ -31,6 +32,17 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     ...,
 ]
+
+REST_FRAMEWORK = {
+    # Define los formatos de respuesta
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    # Para que mi aplicacion pueda hacer uso de JWT
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 ```
 
 ## Info
