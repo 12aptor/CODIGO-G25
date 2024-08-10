@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pagina para probar los cors de Django</title>
+  </head>
+  <body>
+    <button type="button" id="fetchData">Click Aquí</button>
+
+    <script>
+      const fetchData = document.getElementById("fetchData");
+
+      fetchData.addEventListener("click", async () => {
+        const response = await fetch(
+          "http://127.0.0.1:8000/reservas/reservas/listar"
+        );
+        const json = await response.json();
+        console.log(json)
+      });
+    </script>
+  </body>
+</html>

@@ -52,6 +52,7 @@ class ReservaListView(generics.ListAPIView):
         return ReservaModel.objects.order_by('-id')
 
     def list(self, request):
+        pprint(request.headers)
         # Recuperamos el queryset
         queryset = self.get_queryset()
         # Recuperamos el serializer
@@ -83,6 +84,10 @@ class ReservaCreateView(generics.CreateAPIView):
 class ReservaRetrieveView(generics.RetrieveAPIView):
     queryset = ReservaModel.objects.all()
     serializer_class = ReservaSerializer
+
+    def get_queryset(self):
+        # page = self.request.query_params.get('page')
+        return super().get_queryset()
 
     def retrieve(self, request, *args, **kwargs):
         page = request.query_params.get('page')
