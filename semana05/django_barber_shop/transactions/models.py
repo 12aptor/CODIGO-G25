@@ -15,3 +15,19 @@ class AppointmentModel(models.Model):
 
     class Meta:
         db_table = 'appointments'
+
+class PaymentModel(models.Model):
+    id = models.AutoField(primary_key=True)
+    amount = models.FloatField()
+
+    PAYMENT_METHOD_CHOICES = [
+        ('CASH', 'Efectivo'),
+        ('CARD', 'Tarjeta')
+    ]
+
+    payment_menthod = models.CharField(choices=PAYMENT_METHOD_CHOICES)
+    payment_date = models.DateTimeField(auto_now_add=True)
+    appointment_id = models.ForeignKey(AppointmentModel, on_delete=models.CASCADE, related_name='payments')
+
+    class Meta:
+        db_table = 'payments'
