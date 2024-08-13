@@ -19,3 +19,4 @@
 - [semana 4](https://github.com/12aptor/CODIGO-G25/tree/main/semana04)
 
   - [Introducción a Django](https://github.com/12aptor/CODIGO-G25/tree/main/semana04/introduccion_django)
+  - [Django Rest Framework](https://github.com/12aptor/CODIGO-G25/tree/main/semana04/django_rest_framework)
