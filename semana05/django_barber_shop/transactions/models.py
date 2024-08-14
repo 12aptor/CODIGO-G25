@@ -1,6 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
 from services.models import ServiceModel, BarberModel
+from authentication.models import MyUserModel
 
 
 class AppointmentModel(models.Model):
@@ -9,7 +9,7 @@ class AppointmentModel(models.Model):
     status = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointments')
+    user_id = models.ForeignKey(MyUserModel, on_delete=models.CASCADE, related_name='appointments')
     barber_id = models.ForeignKey(BarberModel, on_delete=models.CASCADE, related_name='appointments')
     service_id = models.ForeignKey(ServiceModel, on_delete=models.CASCADE, related_name='appointments')
 
