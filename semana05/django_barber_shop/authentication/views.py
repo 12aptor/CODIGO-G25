@@ -1,5 +1,6 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
 from .models import *
 from .serializers import *
 
@@ -77,11 +78,32 @@ class UserUpdateView(generics.UpdateAPIView):
     serializer_class = UserSerializer
 
     def update(self, request, *args, **kwargs):
-        response = super().update(request, *args, **kwargs)
+        try:
+            response = super().update(request, *args, **kwargs)
+
+            return Response({
+                'message': 'User updated successfully',
+                'data': response.data
+            }, status=status.HTTP_200_OK)
+        except NotFound:
+            return Response({
+                'message': 'User not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+
+    
+class UserDestroyView(generics.DestroyAPIView):
+    queryset = MyUserModel.objects.all()
+    serializer_class = UserSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.status = False
+        instance.save()
+
+        serializer = self.get_serializer(instance)
 
         return Response({
-            'message': 'User updated successfully',
-            'data': response.data
+            'message': 'User deleted successfully',
+            'data': serializer.data
         }, status=status.HTTP_200_OK)
     
-# pbkdf2_sha256$870000$vE2h1r8lXEVD2xqkJzzVsr$swUA7BBYBNu+Hmyqul2TdccaiTRHi1OqE4yo5Nm79Es=

@@ -9,5 +9,6 @@ urlpatterns = [
 
     path('user/list/', UserListView.as_view()),
     path('user/create/', UserCreateView.as_view()),
-    path('user/update/<int:pk>/', UserUpdateView.as_view())
+    path('user/update/<int:pk>/', UserUpdateView.as_view()),
+    path('user/delete/<int:pk>/', UserDestroyView.as_view())
 ]
