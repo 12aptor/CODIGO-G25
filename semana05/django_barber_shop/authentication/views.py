@@ -71,3 +71,17 @@ class UserCreateView(generics.CreateAPIView):
             'message': 'User created successfully',
             'data': response.data
         }, status=status.HTTP_201_CREATED)
+    
+class UserUpdateView(generics.UpdateAPIView):
+    queryset = MyUserModel.objects.all()
+    serializer_class = UserSerializer
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+
+        return Response({
+            'message': 'User updated successfully',
+            'data': response.data
+        }, status=status.HTTP_200_OK)
+    
+# pbkdf2_sha256$870000$vE2h1r8lXEVD2xqkJzzVsr$swUA7BBYBNu+Hmyqul2TdccaiTRHi1OqE4yo5Nm79Es=

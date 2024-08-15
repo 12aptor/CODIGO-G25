@@ -9,7 +9,7 @@ class RoleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=False, allow_blank=True)
 
     class Meta:
         model = MyUserModel
@@ -21,11 +21,11 @@ class UserSerializer(serializers.ModelSerializer):
     #     return user
     
     # def update(self, instance, validated_data):
-    #     instance.name = validated_data.get('name')
-    #     instance.email = validated_data.get('email')
-    #     instance.phone = validated_data.get('phone')
-    #     instance.status = validated_data.get('status')
-    #     instance.rol_id = validated_data.get('rol_id')
+    #     instance.name = validated_data.get('name', instance.name)
+    #     instance.email = validated_data.get('email', instance.email)
+    #     instance.phone = validated_data.get('phone', instance.phone)
+    #     instance.status = validated_data.get('status', instance.status)
+    #     instance.role_id = validated_data.get('role_id', instance.role_id)
 
     #     if 'password' in validated_data:
     #         instance.password = make_password(validated_data.get('password'))
@@ -33,23 +33,25 @@ class UserSerializer(serializers.ModelSerializer):
     #     instance.save()
     #     return instance
 
+
+    # Si se usa save() ya no es necesario el metodo create() y update(). Y viceversa.
     def save(self):
-        name = self.validated_data.get('name')
-        email = self.validated_data.get('email')
-        phone = self.validated_data.get('phone')
-        status = self.validated_data.get('status')
-        rol_id = self.validated_data.get('rol_id')
+        if self.instance:
+            instance = self.instance
+            instance.name = self.validated_data.get('name', instance.name)
+            instance.email = self.validated_data.get('email', instance.email)
+            instance.phone = self.validated_data.get('phone', instance.phone)
+            instance.status = self.validated_data.get('status', instance.status)
+            instance.role_id = self.validated_data.get('role_id', instance.role_id)
 
-        if 'password' in self.validated_data:
-            password = self.validated_data.get('password')
+            if 'password' in self.validated_data:
+                instance.password = make_password(self.validated_data.get('password'))
 
-        user = MyUserModel(
-            name=name,
-            email=email,
-            phone=phone,
-            status=status,
-            rol_id=rol_id
-        )
-        user.set_password(password)
-        user.save()
-        return user
+            instance.save()
+
+            return instance
+        else:
+            user = MyUserModel(**self.validated_data)
+            user.set_password(self.validated_data.get('password'))
+            user.save()
+            return user

@@ -9,4 +9,5 @@ urlpatterns = [
 
     path('user/list/', UserListView.as_view()),
     path('user/create/', UserCreateView.as_view()),
+    path('user/update/<int:pk>/', UserUpdateView.as_view())
 ]
