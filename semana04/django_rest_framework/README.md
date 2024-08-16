@@ -9,6 +9,7 @@ pip install python-dotenv
 pip install psycopg2-binary
 pip install -U drf-yasg
 pip install django-cors-headers
+pip install djangorestframework-simplejwt
 
 # Si aparece el error: ModuleNotFoundError: No module named 'pkg_resources'
 # Ejecutar pip install --upgrade setuptools
