@@ -1,6 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
+from django.http import Http404
+from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import *
 from .serializers import *
 
@@ -33,22 +34,32 @@ class RoleUpdateView(generics.UpdateAPIView):
     serializer_class = RoleSerializer
 
     def update(self, request, *args, **kwargs):
-        response = super().update(request, *args, **kwargs)
+        try:
+            response = super().update(request, *args, **kwargs)
 
-        return Response({
-            'message': 'Role updated successfully',
-            'data': response.data
-        }, status=status.HTTP_200_OK)
+            return Response({
+                'message': 'Role updated successfully',
+                'data': response.data
+            }, status=status.HTTP_200_OK)
+        except Http404:
+            return Response({
+                'message': 'Role not found'
+            }, status=status.HTTP_404_NOT_FOUND)
     
 class RoleDestroyView(generics.DestroyAPIView):
     queryset = RoleModel.objects.all()
 
     def destroy(self, request, *args, **kwargs):
-        super().destroy(request, *args, **kwargs)
-        
-        return Response({
-            'message': 'Role deleted successfully'
-        }, status=status.HTTP_200_OK)
+        try:
+            super().destroy(request, *args, **kwargs)
+            
+            return Response({
+                'message': 'Role deleted successfully'
+            }, status=status.HTTP_200_OK)
+        except Http404:
+            return Response ({
+                'message': 'Role not found'
+            }, status=status.HTTP_404_NOT_FOUND)
     
 class UserListView(generics.ListAPIView):
     queryset = MyUserModel.objects.all()
@@ -85,25 +96,31 @@ class UserUpdateView(generics.UpdateAPIView):
                 'message': 'User updated successfully',
                 'data': response.data
             }, status=status.HTTP_200_OK)
-        except NotFound:
+        except Http404:
             return Response({
                 'message': 'User not found'
             }, status=status.HTTP_404_NOT_FOUND)
-
     
 class UserDestroyView(generics.DestroyAPIView):
     queryset = MyUserModel.objects.all()
     serializer_class = UserSerializer
 
     def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.status = False
-        instance.save()
+        try:
+            instance = self.get_object()
+            instance.status = False
+            instance.save()
 
-        serializer = self.get_serializer(instance)
+            serializer = self.get_serializer(instance)
 
-        return Response({
-            'message': 'User deleted successfully',
-            'data': serializer.data
-        }, status=status.HTTP_200_OK)
-    
+            return Response({
+                'message': 'User deleted successfully',
+                'data': serializer.data
+            }, status=status.HTTP_200_OK)
+        except Http404:
+            return Response({
+                'message': 'User not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+class LoginView(TokenObtainPairView):
+    serializer_class = LoginSerializer

@@ -24,7 +24,8 @@ INSTALLED_APPS = [
     'services',
     'transactions',
     'rest_framework',
-    'drf_yasg'
+    'drf_yasg',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -40,6 +41,9 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASES': (
         'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
 

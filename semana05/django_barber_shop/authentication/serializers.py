@@ -1,6 +1,10 @@
+from typing import Any, Dict
 from rest_framework import serializers
+from rest_framework.serializers import ValidationError
 from .models import *
 from django.contrib.auth.hashers import make_password
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth import authenticate
 
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -55,3 +59,32 @@ class UserSerializer(serializers.ModelSerializer):
             user.set_password(self.validated_data.get('password'))
             user.save()
             return user
+        
+class LoginSerializer(TokenObtainPairSerializer):
+    # def validate(self, attrs):
+    #     data = super().validate(attrs)
+    #     data.update({'user_id': self.user.id})
+    #     data.update({'email': self.user.email})
+
+    #     return data
+
+    def validate(self, attrs: Dict[str, Any]) -> Dict[str, str]:
+        authenticate_kwargs = {
+            self.username_field: attrs[self.username_field],
+            'password': attrs['password']
+        }
+
+        user = authenticate(**authenticate_kwargs)
+
+        if user and user.status:
+            return super().validate(attrs)
+        
+        raise ValidationError('User account is disabled')
+    
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['email'] = user.email
+        token['name'] = user.name
+
+        return token
