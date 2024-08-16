@@ -124,3 +124,11 @@ class UserDestroyView(generics.DestroyAPIView):
         
 class LoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
+
+    def post(self, request, *args, **kwars):
+        try:
+            return super().post(request, *args, **kwars)
+        except ValidationError as e:
+            return Response({
+                'message': 'Unauthorized'
+            }, status=status.HTTP_401_UNAUTHORIZED)
