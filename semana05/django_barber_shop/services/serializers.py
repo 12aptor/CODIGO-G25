@@ -11,3 +11,8 @@ class BarberSerializer(serializers.ModelSerializer):
     class Meta:
         model = BarberModel
         fields = '__all__'
+
+class ScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ScheduleModel
+        fields = '__all__'

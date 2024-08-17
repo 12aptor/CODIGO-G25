@@ -30,7 +30,7 @@ class BarberModel(models.Model):
     class Meta:
         db_table = 'barbers'
 
-class SchedulModel(models.Model):
+class ScheduleModel(models.Model):
     id = models.AutoField(primary_key=True)
 
     DAY_OF_WEEK_CHOICES = [
