@@ -28,3 +28,14 @@ class IsClient(BasePermission):
             }, code=401)
 
         return True
+    
+
+class IsClientOrAdmin(BasePermission):
+    def has_permission(self, request, view):
+        role = request.user.role_id.name
+        if role == 'CLIENT' or role == 'ADMIN':
+            return True
+        
+        raise AuthenticationFailed(detail={
+            'message': 'Unauthorized'
+        }, code=401)
