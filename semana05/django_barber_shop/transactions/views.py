@@ -1,14 +1,18 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from django.http import Http404
 from .models import *
 from .serializers import *
+from authentication.permissions import (
+    IsAuthenticated,
+    IsAdmin,
+    IsClient
+)
 
 
 class AppointmentCreateView(generics.CreateAPIView):
     serializer_class = AppointmentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsClient]
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
@@ -21,7 +25,7 @@ class AppointmentCreateView(generics.CreateAPIView):
 class AppointmentListView(generics.ListAPIView):
     queryset = AppointmentModel.objects.all()
     serializer_class = AppointmentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
@@ -34,6 +38,7 @@ class AppointmentListView(generics.ListAPIView):
 class PaymentListView(generics.ListAPIView):
     queryset = PaymentModel.objects.all()
     serializer_class = PaymentSerializer
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
