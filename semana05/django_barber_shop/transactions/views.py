@@ -11,6 +11,7 @@ from authentication.permissions import (
 import os
 import requests
 from datetime import datetime
+from django.shortcuts import get_object_or_404
 
 
 class AppointmentCreateView(generics.CreateAPIView):
@@ -96,12 +97,31 @@ class PaymentDestroyView(generics.DestroyAPIView):
         
 class InvoiceCreateView(generics.GenericAPIView):
     
-    def post(self, request):
+    def post(self, request, appointment_id):
         try:
+            appointment = get_object_or_404(AppointmentModel, id=appointment_id)
+
+            # subtotal = total / 1.18
+            total = appointment.service_id.price
+            subtotal = total / 1.18
+            igv = total - subtotal
+
+            item = {
+                'unidad_de_medida': 'ZZ',
+                'codigo': 'C001',
+                'descripcion': appointment.service_id.description,
+                'cantidad': 1,
+                'valor_unitario': subtotal,
+                'precio_unitario': total,
+                'subtotal': subtotal,
+                'tipo_de_igv': 1,
+                'igv': igv,
+                'total': total,
+                'anticipo_regularizacion': False
+            }
+
             url = os.environ.get('NUBEFACT_URL')
             token = os.environ.get('NUBEFACT_TOKEN')
-
-            print(datetime.now().strftime('%d-%m-%Y'))
 
             invoice_data = {
                 'operacion': 'generar_comprobante',
@@ -117,24 +137,12 @@ class InvoiceCreateView(generics.GenericAPIView):
                 'fecha_de_emision': datetime.now().strftime('%d-%m-%Y'),
                 'moneda': 1,
                 'porcentaje_de_igv': 18.0,
-                'total': 118,
+                'total_gravada': subtotal,
+                'total_igv': igv,
+                'total': total,
                 'enviar_automaticamente_a_la_sunat': True,
                 'enviar_automaticamente_al_cliente': True,
-                'items': [
-                    {
-                        'unidad_de_medida': 'ZZ',
-                        'codigo': 'C001',
-                        'descripcion': 'DESCRIPCION DE PRUEBA',
-                        'cantidad': 1,
-                        'valor_unitario': 100,
-                        'precio_unitario': 118,
-                        'subtotal': 100,
-                        'tipo_de_igv': 1,
-                        'igv': 18,
-                        'total': 118,
-                        'anticipo_regularizacion': False
-                    }
-                ]
+                'items': [item]
             }
 
             nubefact_response = requests.post(url=url, headers={
@@ -142,15 +150,27 @@ class InvoiceCreateView(generics.GenericAPIView):
             }, json=invoice_data)
 
             nubefact_response_json = nubefact_response.json()
+            nubefact_response_status = nubefact_response.status_code
 
-            print(nubefact_response_json)
-            print(nubefact_response.status_code)
+            if nubefact_response_status != 200:
+                raise Exception(nubefact_response_json['errors'])
 
             return Response({
-                'message': 'Ok'
+                'message': 'Invoice created successfully',
+                'data': nubefact_response_json
             }, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({
-                'message': 'Error'
+                'message': str(e.args[0])
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+class InvoiceRetrieveView(generics.GenericAPIView):
+
+    def get(self, request, tipo_de_comprobante: int, serie: str, numero: int):
+        try:
+            print(tipo_de_comprobante, serie, numero)
+            pass
+        except Exception as e:
+            return Response({
+                'message': str(e.args[0])
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

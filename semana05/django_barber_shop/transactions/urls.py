@@ -11,5 +11,6 @@ urlpatterns = [
     path('payment/update/<int:pk>/', PaymentUpdateView.as_view()),
     path('payment/delete/<int:pk>/', PaymentDestroyView.as_view()),
 
-    path('invoice/create/', InvoiceCreateView.as_view()),
+    path('invoice/create/<int:appointment_id>/', InvoiceCreateView.as_view()),
+    path('invoice/find/<int:tipo_de_comprobante>/<str:serie>/<int:numero>/', InvoiceRetrieveView.as_view()),
 ]
