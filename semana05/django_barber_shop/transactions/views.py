@@ -1,4 +1,5 @@
 from rest_framework import generics, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import Http404
 from .models import *
@@ -12,6 +13,7 @@ import os
 import requests
 from datetime import datetime
 from django.shortcuts import get_object_or_404
+import mercadopago
 
 
 class AppointmentCreateView(generics.CreateAPIView):
@@ -56,11 +58,31 @@ class PaymentCreateView(generics.CreateAPIView):
     serializer_class = PaymentSerializer
 
     def create(self, request, *args, **kwargs):
-        response = super().create(request, *args, **kwargs)
+
+        token = os.environ.get('MERCADOPAGO_TOKEN')
+        mp = mercadopago.SDK(token)
+
+        preference = {
+            'items': [
+                {
+                    'id': 1,
+                    'title': 'Corte de cabello',
+                    'description': 'Servicio de corte de cabello',
+                    'quantity': 1,
+                    'currency_id': 'MXN',
+                    'unit_price': 20
+                }
+            ]
+        }
+
+        mp_response = mp.preference().create(preference)
+
+        # response = super().create(request, *args, **kwargs)
 
         return Response({
             'message': 'Payment created successfully',
-            'data': response.data
+            # 'data': response.data,
+            'data': mp_response
         }, status=status.HTTP_201_CREATED)
     
 class PaymentUpdateView(generics.UpdateAPIView):
@@ -95,7 +117,7 @@ class PaymentDestroyView(generics.DestroyAPIView):
                 'message': 'Payment not found'
             }, status=status.HTTP_404_NOT_FOUND)
         
-class InvoiceCreateView(generics.GenericAPIView):
+class InvoiceCreateView(APIView):
     
     def post(self, request, appointment_id):
         try:
@@ -168,7 +190,7 @@ class InvoiceCreateView(generics.GenericAPIView):
                 'message': str(e.args[0])
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class InvoiceRetrieveView(generics.GenericAPIView):
+class InvoiceRetrieveView(APIView):
 
     def get(self, request, tipo_de_comprobante: int, serie: str, numero: int):
         try:
