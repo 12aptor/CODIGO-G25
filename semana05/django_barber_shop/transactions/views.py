@@ -145,9 +145,13 @@ class InvoiceCreateView(generics.GenericAPIView):
                 'items': [item]
             }
 
-            nubefact_response = requests.post(url=url, headers={
-                'Authorization': f'Bearer {token}'
-            }, json=invoice_data)
+            nubefact_response = requests.post(
+                url=url,
+                headers={
+                    'Authorization': f'Bearer {token}'
+                },
+                json=invoice_data
+            )
 
             nubefact_response_json = nubefact_response.json()
             nubefact_response_status = nubefact_response.status_code
@@ -168,8 +172,34 @@ class InvoiceRetrieveView(generics.GenericAPIView):
 
     def get(self, request, tipo_de_comprobante: int, serie: str, numero: int):
         try:
-            print(tipo_de_comprobante, serie, numero)
-            pass
+            url = os.environ.get('NUBEFACT_URL')
+            token = os.environ.get('NUBEFACT_TOKEN')
+
+            invoice_data = {
+                'operacion': 'consultar_comprobante',
+                'tipo_de_comprobante': tipo_de_comprobante,
+                'serie': serie,
+                'numero': numero
+            }
+
+            nubefact_response = requests.post(
+                url=url,
+                headers={
+                    'Authorization': f'Bearer {token}'
+                },
+                json=invoice_data
+            )
+
+            nubefact_response_status = nubefact_response.status_code
+            nubefact_response_json = nubefact_response.json()
+
+            if nubefact_response_status != 200:
+                raise Exception(nubefact_response_json['errors'])
+            
+            return Response({
+                'message': 'Invoice fetched successfully',
+                'data': nubefact_response_json
+            }, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({
                 'message': str(e.args[0])
