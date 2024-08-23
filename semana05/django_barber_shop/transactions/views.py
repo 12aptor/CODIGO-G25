@@ -65,14 +65,20 @@ class PaymentCreateView(generics.CreateAPIView):
         preference = {
             'items': [
                 {
-                    'id': 1,
-                    'title': 'Corte de cabello',
-                    'description': 'Servicio de corte de cabello',
-                    'quantity': 1,
+                    'id': 2,
+                    'title': 'Zapatillas Nike',
+                    'description': 'Zapatillas urbanas color negro',
+                    'quantity': 2,
                     'currency_id': 'MXN',
-                    'unit_price': 20
+                    'unit_price': 1000
                 }
-            ]
+            ],
+            'back_urls': {
+                'success': 'https://test_frontend.com/success',
+                'pending': 'https://test_frontend.com/pending',
+                'failure': 'https://test_frontend.com/failure',
+            },
+            'notification_url': 'https://test_backend.com/api/v1/transactions/payment/verify/'
         }
 
         mp_response = mp.preference().create(preference)
@@ -84,6 +90,15 @@ class PaymentCreateView(generics.CreateAPIView):
             # 'data': response.data,
             'data': mp_response
         }, status=status.HTTP_201_CREATED)
+    
+class PaymentVerifyView(APIView):
+    def post(self, request):
+        print(request.data)
+        print(request.query_params)
+
+        return Response({
+            'message': 'Payment verified successfully'
+        }, status=status.HTTP_200_OK)
     
 class PaymentUpdateView(generics.UpdateAPIView):
     queryset = PaymentModel.objects.all()
