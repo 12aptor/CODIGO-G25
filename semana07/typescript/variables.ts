@@ -22,7 +22,5 @@ numbers = [1, 2, 3];
 let letters: string[];
 letters = ["a", "b", "c"];
 
-let person: { id: number; name: string} = { id: 1, name: "Eduardo"};
-
 let married: "YES" | "NO";
 married = "NO";
