@@ -9,7 +9,7 @@ npm init -y
 ## Instalar dependencias
 
 ```bash
-npm install --save express
+npm install express
 npm install --save-dev @types/express
 npm install --save-dev typescript
 npm install --save-dev ts-node-dev # Para ejecutar el servidor en modo desarrollo (incluye hot reload)
@@ -70,4 +70,11 @@ npx tsc --init
   "include": ["**/*.ts"],
   "exclude": ["node_modules", "build"]
 }
+```
+
+## Agregar logs en el servidor
+
+```bash
+npm install morgan
+npm install --save-dev @types/morgan
 ```

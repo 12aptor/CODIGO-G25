@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hacker Website</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background-color: black;
+      }
+
+      #canvas {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const letters = Array(256).join(1).split("");
+      const fontSize = 14;
+      const columns = canvas.width / fontSize;
+      const rain = Array(Math.floor(columns)).fill(0);
+
+      const draw = () => {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#0f0";
+        ctx.font = fontSize + "px monospace";
+
+        rain.forEach((y, index) => {
+          const text = String.fromCharCode(65 + Math.random() * 33);
+          const x = index * fontSize;
+          ctx.fillText(text, x, y);
+
+          if (y > 100 + Math.random() * 10000) {
+            rain[index] = 0;
+          } else {
+            rain[index] = y + fontSize;
+          }
+        });
+      };
+
+      setInterval(draw, 1000 / 60);
+    </script>
+  </body>
+</html>
