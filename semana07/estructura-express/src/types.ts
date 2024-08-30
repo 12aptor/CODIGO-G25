@@ -1,12 +1,7 @@
 import { ZodIssue } from "zod";
 
-export interface ITask {
-  id: number;
-  name: string;
-}
-
-export interface IApiResponse<T> {
+export interface IApiResponse {
   message: string;
-  data?: T;
+  data?: any;
   error?: string | ZodIssue[];
 }

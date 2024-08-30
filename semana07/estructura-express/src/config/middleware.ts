@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 declare module "jsonwebtoken" {
   export interface JwtPayload {
@@ -25,13 +25,14 @@ export const authMiddleware = (
   const token = bearerToken.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, "secret") as JwtPayload;
-
-    if (decoded.id !== 1) {
-      return res.status(401).json({
-        message: "No tienes autorización",
-      });
-    }
+    // const decoded = jwt.verify(token, "secret") as JwtPayload;
+    jwt.verify(token, "secret");
+    
+    // if (decoded.id !== 1) {
+    //   return res.status(401).json({
+    //     message: "No tienes autorización",
+    //   });
+    // }
 
     return next();
   } catch (error) {
