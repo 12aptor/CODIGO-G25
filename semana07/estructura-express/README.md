@@ -53,5 +53,5 @@ model tasks {
 
 ```bash
 npx prisma migrate dev
-npx prisma migrate dev --name "migration_name"
+# npx prisma migrate dev --name "migration_name"
 ```
