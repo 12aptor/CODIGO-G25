@@ -55,3 +55,9 @@ model tasks {
 npx prisma migrate dev
 # npx prisma migrate dev --name "migration_name"
 ```
+
+## Instalar prisma client
+
+```bash
+npm install @prisma/client
+```

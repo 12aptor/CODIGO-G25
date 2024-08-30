@@ -15,13 +15,20 @@ model users {
   tasks    tasks[]
 }
 
+enum TaskStatus {
+  PENDING
+  DONE
+  CANCELLED
+  IN_PROGRESS
+}
+
 model tasks {
-  id          Int      @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   name        String
-  description String?  @db.Text
-  status      Boolean  @default(false)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  description String?    @db.Text
+  status      TaskStatus @default(PENDING)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
   user_id     Int
-  user        users    @relation(fields: [user_id], references: [id])
+  user        users      @relation(fields: [user_id], references: [id])
 }
