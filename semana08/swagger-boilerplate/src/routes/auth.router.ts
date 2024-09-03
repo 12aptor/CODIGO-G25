@@ -27,6 +27,23 @@ export const authRouter = Router();
  *                 type: string
  *                 description: User password
  *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Login successful message
+ *                   example: Login successful
+ *                 access:
+ *                   type: string
+ *                   description: Access token
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+ * 
 */
 authRouter.post("/login", (_req, res) => {
   res.send("Login Successful");

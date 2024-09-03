@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  ONLINE
+  OFFLINE
+  IDLE
+}
+
+model users {
+  id         Int        @id @default(autoincrement())
+  username   String     @unique
+  email      String     @unique
+  password   String
+  avatar     String     @db.Text
+  status     UserStatus @default(ONLINE)
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  messages   messages[]
+}
+
+model messages {
+  id              Int               @id @default(autoincrement())
+  content         String            @db.Text
+  author_id       Int
+  author          users             @relation(fields: [author_id], references: [id])
+  channel_id      String
+  channel         channels          @relation(fields: [channel_id], references: [id])
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  pinned_messages pinned_messages[]
+}
+
+enum ChannelType {
+  TEXT
+  VOICE
+}
+
+model channels {
+  id              String            @id @default(uuid())
+  name            String            @unique
+  type            ChannelType       @default(TEXT)
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  messages        messages[]
+  pinned_messages pinned_messages[]
+}
+
+model pinned_messages {
+  message_id Int
+  message    messages @relation(fields: [message_id], references: [id])
+  channel_id String
+  channel    channels @relation(fields: [channel_id], references: [id])
+  pinned_at  DateTime @default(now())
+
+  @@id([message_id, channel_id])
+}
