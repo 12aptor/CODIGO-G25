@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sockets con Express</title>
+  </head>
+  <body>
+    <h1>Sockets</h1>
+
+    <script type="module">
+      import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
+
+      const socket = io("http://localhost:8000");
+
+      socket.emit("message", {
+        content: "Hola soy un mensaje enviado por el socket",
+        user_id: 1,
+      });
+    </script>
+  </body>
+</html>
