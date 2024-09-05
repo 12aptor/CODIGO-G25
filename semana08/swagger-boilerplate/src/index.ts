@@ -10,6 +10,7 @@ import { authRouter } from "./routes/auth.router";
 import { channelRouter } from "./routes/channel.router";
 import { messageRouter } from "./routes/message.router";
 import { prisma } from "./config/prisma";
+import { ISocketMsg } from "./types";
 
 dotenv.config();
 
