@@ -8,6 +8,13 @@ export const listMessages = async (req: Request, res: Response) => {
       where: {
         channel_id: channelId,
       },
+      include: {
+        author: {
+          select: {
+            username: true,
+          },
+        },
+      },
     });
 
     return res.status(200).json({

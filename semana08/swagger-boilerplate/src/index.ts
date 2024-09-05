@@ -9,6 +9,7 @@ import { swaggerSpec } from "./config/swagger";
 import { authRouter } from "./routes/auth.router";
 import { channelRouter } from "./routes/channel.router";
 import { messageRouter } from "./routes/message.router";
+import { prisma } from "./config/prisma";
 
 dotenv.config();
 
@@ -32,8 +33,31 @@ app.use("/api/v1/channels", channelRouter);
 app.use("/api/v1/messages", messageRouter);
 
 io.on("connection", (socket) => {
-  socket.on("message", (msg) => {
-    io.emit("message", msg);
+  socket.on("join", (channel_id: string) => {
+    socket.join(channel_id);
+  });
+
+  socket.on("message", async (msg: ISocketMsg) => {
+    try {
+      const message = await prisma.messages.create({
+        data: msg,
+        include: {
+          author: {
+            select: {
+              username: true,
+            },
+          },
+        },
+      });
+
+      io.to(msg.channel_id).emit("message", message);
+    } catch (error) {
+      if (error instanceof Error) {
+        socket.emit("error", {
+          message: "Ocurrio un error al enviar el mensaje",
+        });
+      }
+    }
   });
 
   socket.on("disconnect", () => {
