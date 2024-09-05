@@ -23,7 +23,7 @@ const swaggerDefinition = {
             type: "string",
             description: "ID único del canal (uuid)",
             example: "e2a4-t68t-9y7i",
-            readOnly: true
+            readOnly: true,
           },
           name: {
             type: "string",
@@ -41,14 +41,108 @@ const swaggerDefinition = {
             format: "date-time",
             description: "Fecha y hora de creación",
             example: "2024-01-01T00:00:00Z",
-            readOnly: true
+            readOnly: true,
           },
           updated_at: {
             type: "string",
             format: "date-time",
             description: "Fecha y hora de creación",
             example: "2024-01-01T00:00:00Z",
-            readOnly: true
+            readOnly: true,
+          },
+        },
+      },
+      CreateChannelResponse: {
+        type: "object",
+        properties: {
+          message: {
+            type: "string",
+            description: "Mensaje del servidor",
+            example: "Canal creado exitosamente",
+          },
+          data: {
+            type: "object",
+            $ref: "#/components/schemas/Channel",
+          },
+        },
+      },
+      ListChannelResponse: {
+        type: "object",
+        properties: {
+          message: {
+            type: "string",
+            description: "Mensaje del servidor",
+            example: "Canales obtenidos exitosamente",
+          },
+          data: {
+            type: "array",
+            items: {
+              $ref: "#/components/schemas/Channel",
+            },
+          },
+        },
+      },
+      Message: {
+        type: "object",
+        required: ["name", "type"],
+        properties: {
+          id: {
+            type: "integer",
+            format: "int64",
+            description: "ID único del canal",
+            example: 1,
+            readOnly: true,
+          },
+          content: {
+            type: "string",
+            description: "Contenido del mensaje",
+            example: "Hola",
+          },
+          author_id: {
+            type: "integer",
+            format: "int64",
+            description: "Id único del autor",
+            example: 1,
+          },
+          author: {
+            type: "object",
+            properties: {
+              username: {
+                type: "string",
+                description: "Username del autor",
+                example: "pepito",
+              },
+            },
+          },
+          created_at: {
+            type: "string",
+            format: "date-time",
+            description: "Fecha y hora de creación",
+            example: "2024-01-01T00:00:00Z",
+            readOnly: true,
+          },
+          updated_at: {
+            type: "string",
+            format: "date-time",
+            description: "Fecha y hora de creación",
+            example: "2024-01-01T00:00:00Z",
+            readOnly: true,
+          },
+        },
+      },
+      ListMessagesResponse: {
+        type: "object",
+        properties: {
+          message: {
+            type: "string",
+            description: "Mensaje del servidor",
+            example: "Mensajes obtenidos exitosamente",
+          },
+          data: {
+            type: "array",
+            items: {
+              $ref: "#/components/schemas/Message",
+            },
           },
         },
       },

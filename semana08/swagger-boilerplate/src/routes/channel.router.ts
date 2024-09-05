@@ -22,7 +22,23 @@ export const channelRouter = Router();
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Channel'   
-*/
+ *               $ref: '#/components/schemas/CreateChannelResponse'   
+ */
 channelRouter.post("/create", channelController.createChannel);
+
+/**
+ * @swagger
+ * /api/v1/channels/list:
+ *   get:
+ *     summary: Ruta para listar canales
+ *     description: Listar canales
+ *     tags: [Channels]
+ *     responses:
+ *       200:
+ *         description: Lista de canales
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ListChannelResponse'
+ */
 channelRouter.get("/list", channelController.listChannels);
