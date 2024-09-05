@@ -6,16 +6,33 @@
     <title>Sockets con Express</title>
   </head>
   <body>
-    <h1>Sockets</h1>
+    <h1>Chat</h1>
+
+    <ul id="messagesList"></ul>
+    <input type="text" placeholder="Escribir..." id="messageInput" />
+    <button type="button" id="sendMessage">Enviar</button>
 
     <script type="module">
       import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
 
       const socket = io("http://localhost:8000");
 
-      socket.emit("message", {
-        content: "Hola soy un mensaje enviado por el socket",
-        user_id: 1,
+      socket.on("message", (msg) => {
+        const messagesList = document.getElementById("messagesList");
+
+        const li = document.createElement("li");
+        li.innerText = `${msg.username}: ${msg.content}`;
+        messagesList.appendChild(li);
+      });
+
+      const messageInput = document.getElementById("messageInput");
+      const sendMessage = document.getElementById("sendMessage");
+
+      sendMessage.addEventListener("click", () => {
+        socket.emit("message", {
+          content: messageInput.value,
+          username: "Pepito",
+        });
       });
     </script>
   </body>

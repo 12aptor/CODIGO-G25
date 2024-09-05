@@ -7,6 +7,7 @@ import { Server } from "socket.io";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger";
 import { authRouter } from "./routes/auth.router";
+import { channelRouter } from "./routes/channel.router";
 
 dotenv.config();
 
@@ -26,10 +27,11 @@ app.use(cors());
 
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/channels", channelRouter);
 
 io.on("connection", (socket) => {
   socket.on("message", (msg) => {
-    console.log(msg);
+    io.emit("message", msg);
   });
 
   socket.on("disconnect", () => {
