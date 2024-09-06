@@ -11,6 +11,8 @@ import { channelRouter } from "./routes/channel.router";
 import { messageRouter } from "./routes/message.router";
 import { prisma } from "./config/prisma";
 import { ISocketMsg } from "./types";
+import { getDownloadURL, getStorage, ref } from "firebase/storage";
+import { firebaseApp } from "./config/firebase";
 
 dotenv.config();
 
@@ -40,18 +42,30 @@ io.on("connection", (socket) => {
 
   socket.on("message", async (msg: ISocketMsg) => {
     try {
+      const storage = getStorage(firebaseApp);
+
       const message = await prisma.messages.create({
         data: msg,
         include: {
           author: {
             select: {
+              avatar: true,
               username: true,
             },
           },
         },
       });
 
-      io.to(msg.channel_id).emit("message", message);
+      const storageRef = ref(storage, `users/avatars/${message.author.avatar}`);
+      const avatarUrl = await getDownloadURL(storageRef);
+
+      io.to(msg.channel_id).emit("message", {
+        ...message,
+        author: {
+          ...message.author,
+          avatar: avatarUrl,
+        },
+      });
     } catch (error) {
       if (error instanceof Error) {
         socket.emit("error", {
