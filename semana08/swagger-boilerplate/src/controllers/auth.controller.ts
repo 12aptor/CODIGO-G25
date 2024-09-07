@@ -102,7 +102,10 @@ export const login = async (req: Request, res: Response) => {
         username: user.username,
         email: user.email,
       },
-      secret
+      secret,
+      {
+        expiresIn: "7d",
+      }
     );
 
     return res.status(200).json({
