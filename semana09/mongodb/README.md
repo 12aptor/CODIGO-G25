@@ -276,3 +276,49 @@ db.customers.find().skip(2).limit(2).sort({ age: -1 });
         ]
     })
     ```
+
+### Los operadores de elementos
+
+- $exists: Verifica si existe un campo
+
+    ```javascript
+    db.customers.find({
+        tags: {
+            $exists: true
+        }
+    })
+    ```
+
+- $type: Verifica el tipo de un campo
+
+    ```javascript
+    db.customers.find({
+        age: {
+            $type: "number"
+        }
+    })
+    ```
+
+### Cosultas en arrays
+
+- $elemMatch: Coincide con un elemento de un array
+
+    ```javascript
+    db.customers.find({
+        tags: {
+            $elemMatch: {
+                $eq: "cool"
+            }
+        }
+    })
+    ```
+
+- $size: Verifica el tamaño de un array
+
+    ```javascript
+    db.customers.find({
+        'location.coordinates': {
+            $size: 1
+        }
+    })
+    ```
