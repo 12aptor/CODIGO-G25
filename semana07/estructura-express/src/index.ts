@@ -4,6 +4,8 @@ import cors from "cors";
 import { authMiddleware } from "./config/middleware";
 import { taskRouter } from "./routes/task.router";
 import { authRouter } from "./routes/auth.router";
+import { swaggerSpec } from "./config/swagger";
+import swaggerUi from "swagger-ui-express";
 
 const app = express();
 const port = 8000;
@@ -16,6 +18,7 @@ app.use(morgan("dev"));
 // }));
 app.use(cors());
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/v1/task", authMiddleware, taskRouter);
 app.use("/api/v1/auth", authRouter);
 

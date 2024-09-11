@@ -318,7 +318,7 @@ db.customers.find().skip(2).limit(2).sort({ age: -1 });
     ```javascript
     db.customers.find({
         'location.coordinates': {
-            $size: 1
+            $size: 2
         }
     })
     ```
