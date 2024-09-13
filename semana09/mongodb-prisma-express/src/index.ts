@@ -1,14 +1,14 @@
 import express from "express";
-import { prisma } from "./config/prisma";
+import { postRouter } from "./routes/post.router";
+import { userRouter } from "./routes/user.router";
 
 const app = express();
 const port = 3000;
 
-app.get("/", async (_req, res) => {
-  const posts = await prisma.posts.findMany();
+app.use(express.json());
 
-  return res.status(200).json(posts);
-});
+app.use("/api/v1/posts", postRouter);
+app.use("/api/v1/users", userRouter);
 
 app.listen(port, () => {
   console.log(`Running app: http://localhost:${port}`);
