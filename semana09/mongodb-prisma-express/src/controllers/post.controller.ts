@@ -32,15 +32,21 @@ export const createPost = async (req: Request, res: Response) => {
   }
 };
 
-export const getPosts = async (_req: Request, res: Response) => {
+export const getPosts = async (req: Request, res: Response) => {
   try {
+    const queryParams = req.query;
+    const page = parseInt(queryParams.page as string) - 1;
+    const limit = parseInt(queryParams.limit as string);
+
     const posts = await prisma.posts.findMany({
+      skip: page * limit,
+      take: limit,
       include: {
         author: true,
         comments: {
           include: {
-            author: true
-          }
+            author: true,
+          },
         },
       },
     });

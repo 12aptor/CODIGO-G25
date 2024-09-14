@@ -1,6 +1,8 @@
-const getPosts = async () => {
+const getPosts = async (page) => {
   try {
-    const response = await fetch("http://localhost:3000/api/v1/posts/list");
+    const response = await fetch(
+      `http://localhost:3000/api/v1/posts/list?page=${page}&limit=3`
+    );
 
     if (!response.ok) {
       return null;
@@ -29,10 +31,9 @@ const createPostCard = (post) => {
   return card;
 };
 
+const postList = document.getElementById("post-list");
 const renderPosts = async () => {
-  const postList = document.getElementById("post-list");
-
-  const posts = await getPosts();
+  const posts = await getPosts(1);
 
   if (posts) {
     posts.forEach((post) => {
@@ -41,5 +42,34 @@ const renderPosts = async () => {
     });
   }
 };
+
+const nextPageButton = document.getElementById("next-page");
+const nextPage = async () => {
+  const posts = await getPosts(2);
+  postList.innerHTML = "";
+
+  if (posts) {
+    posts.forEach((post) => {
+      const postCart = createPostCard(post);
+      postList.appendChild(postCart);
+    });
+  }
+};
+
+const prevPageButton = document.getElementById("prev-page");
+const prevPage = async () => {
+  const posts = await getPosts(1);
+  postList.innerHTML = "";
+
+  if (posts) {
+    posts.forEach((post) => {
+      const postCart = createPostCard(post);
+      postList.appendChild(postCart);
+    });
+  }
+};
+
+nextPageButton.addEventListener("click", nextPage);
+prevPageButton.addEventListener("click", prevPage);
 
 document.addEventListener("DOMContentLoaded", renderPosts);
